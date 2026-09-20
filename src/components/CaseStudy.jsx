@@ -19,7 +19,16 @@ export function CaseStudy({ project, onClose }) {
   }, [images.length, onClose])
 
   const visualProject = images.length ? { ...project, coverImage: images[activeImage] } : project
-  const sections = [['Problem', project.problem], ['Solution', project.solution], ['My role', project.role], ['Technical approach', project.approach], ['Outcome / what I learned', project.outcome]].filter(([, value]) => value)
+  const sections = [
+    ['Business problem', project.problem],
+    ['Solution', project.solution],
+    ['Architecture', project.architecture],
+    ['Integrated AI agent', project.agent],
+    ['Security & access', project.security],
+    ['My role', project.role],
+    ['Technical approach', project.approach],
+    ['Outcome / what I learned', project.outcome],
+  ].filter(([, value]) => value)
 
   return <div className="case-overlay" role="dialog" aria-modal="true" aria-labelledby="case-title">
     <div className="case-study">

@@ -1,63 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ArrowRight,
   ArrowUp,
   ArrowUpRight,
-  Code2,
   Download,
   GraduationCap,
-  LayoutTemplate,
   Mail,
   MapPin,
   Send,
-  Server,
   Sparkles,
-  Wrench,
 } from "lucide-react";
 import { Navigation } from "./components/Navigation";
 import { CaseStudy } from "./components/CaseStudy";
-import { ProjectVisual } from "./components/ProjectVisual";
+import { ProjectPreview } from "./components/ProjectPreview";
 import { Reveal } from "./components/Reveal";
 import { GithubIcon, LinkedinIcon } from "./components/SocialIcons";
 import { experience, profile, projects, skills } from "./data/portfolio";
+import { useScrollMotion } from "./hooks/useScrollMotion";
 import "./styles.css";
-
-const roles = [
-  "AI Engineer",
-  "Backend Engineer",
-  "Agentic AI Builder",
-  "Full-Stack Developer",
-];
-const skillIcons = {
-  sparkles: Sparkles,
-  server: Server,
-  layout: LayoutTemplate,
-  tools: Wrench,
-};
-
-function useTypingRole() {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [text, setText] = useState("");
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    const role = roles[roleIndex];
-    const finished = text === role;
-    const empty = text === "";
-    const delay = finished && !deleting ? 1300 : deleting ? 45 : 85;
-    const timer = window.setTimeout(() => {
-      if (finished && !deleting) return setDeleting(true);
-      if (empty && deleting) {
-        setDeleting(false);
-        setRoleIndex((roleIndex + 1) % roles.length);
-        return;
-      }
-      setText(role.slice(0, text.length + (deleting ? -1 : 1)));
-    }, delay);
-    return () => window.clearTimeout(timer);
-  }, [deleting, roleIndex, text]);
-  return text;
-}
 
 function SectionHeader({ index, label, title, subtitle }) {
   return (
@@ -72,62 +32,21 @@ function SectionHeader({ index, label, title, subtitle }) {
 }
 
 function Hero() {
-  const role = useTypingRole();
   return (
     <section className="hero" id="home">
-      <div className="hero-grid" aria-hidden="true" />
-      <div className="hero-orb hero-orb-left" aria-hidden="true" />
-      <div className="hero-orb hero-orb-right" aria-hidden="true" />
+      <div className="hero-grain" aria-hidden="true" />
       <div className="container hero-content">
-        <p className="status-pill">
-          <Sparkles /> Available for new opportunities <i />
-        </p>
-        <p className="hero-greeting">Hi, I’m Maroom —</p>
-        <h1>
-          <span>MAROOM</span> <em>ABDALLA</em>
-        </h1>
-        <p className="typing-role">
-          <span>{role}</span>
-          <i />
-        </p>
-        <p className="hero-copy">
-          I build intelligent applications, AI agents, scalable backend systems,
-          and real-world digital products.
-        </p>
-        <div className="hero-actions">
-          <a className="button button-primary" href="#projects">
-            View my work <ArrowRight />
-          </a>
-          <a
-            className="button button-secondary"
-            href={profile.github}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <GithubIcon /> GitHub Profile
-          </a>
+        <div className="hero-kicker"><span>Independent portfolio / 2026</span><span>Amman, Jordan</span></div>
+        <div className="hero-title-wrap" data-scroll-motion>
+          <h1><span>Building digital</span><em>experiences.</em></h1>
+          <div className="hero-seal" aria-hidden="true"><Sparkles /><span>AI<br />BACKEND<br />SYSTEMS</span></div>
         </div>
-        <div className="icon-links">
-          <a
-            href={profile.github}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-          >
-            <GithubIcon />
-          </a>
-          <a
-            href={profile.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-          >
-            <LinkedinIcon />
-          </a>
-          <a href={`mailto:${profile.email}`} aria-label="Email">
-            <Mail />
-          </a>
+        <div className="hero-bottom">
+          <div><p className="hero-name">Maroom Abdalla</p><p className="hero-role">AI &amp; Backend Engineer</p></div>
+          <p className="hero-copy">I shape intelligent applications, agentic workflows, and scalable backend systems into focused digital products.</p>
+          <a className="circle-link" href="#projects" aria-label="Explore selected work"><ArrowRight /><span>Explore<br />work</span></a>
         </div>
+        <a className="scroll-cue" href="#about"><i /> Scroll to discover</a>
       </div>
     </section>
   );
@@ -167,7 +86,7 @@ function About() {
               </a>
             </div>
           </Reveal>
-          <div className="stats-grid">
+        <div className="stats-grid" data-scroll-motion>
             <Reveal className="stat-card" delay={60}>
               <strong>
                 AI +<br />
@@ -202,7 +121,6 @@ function Skills() {
         />
         <div className="skills-grid">
           {skills.map((group, index) => {
-            const Icon = skillIcons[group.icon] || Code2;
             return (
               <Reveal
                 as="article"
@@ -210,9 +128,6 @@ function Skills() {
                 delay={index * 70}
                 key={group.title}
               >
-                <div className="card-icon">
-                  <Icon />
-                </div>
                 <span className="card-number">0{index + 1}</span>
                 <h3>{group.title}</h3>
                 <p>{group.description}</p>
@@ -240,11 +155,11 @@ function Projects({ onOpen }) {
           title="Featured Projects"
           subtitle="Intelligent systems and applications I’ve built."
         />
-        <div className="project-grid">
+        <div className="project-list">
           {projects.map((project, index) => (
             <Reveal
               as="article"
-              className="project-card"
+              className={`project-card ${index % 2 ? 'is-reverse' : ''}`}
               delay={(index % 3) * 70}
               key={project.slug}
             >
@@ -253,14 +168,14 @@ function Projects({ onOpen }) {
                 onClick={() => onOpen(project)}
                 aria-label={`Open ${project.title} project details`}
               >
-                <div className="project-media">
-                  <ProjectVisual project={project} />
+                <div className="project-media" data-scroll-motion>
+                  <ProjectPreview project={project} />
                   {project.featured && (
                     <span className="featured-label">Featured</span>
                   )}
                 </div>
                 <div className="project-card-body">
-                  <p className="project-category">{project.subtitle}</p>
+                  <p className="project-category"><span>{project.number}</span>{project.subtitle}</p>
                   <div className="project-title-row">
                     <h3>{project.title}</h3>
                     <ArrowUpRight />
@@ -507,6 +422,7 @@ function Footer() {
 
 function App() {
   const [activeProject, setActiveProject] = useState(null);
+  useScrollMotion();
   return (
     <div className="site-shell">
       <a className="skip-link" href="#about">
