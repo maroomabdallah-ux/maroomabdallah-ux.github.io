@@ -1,15 +1,15 @@
 # Maroom Abdalla — Portfolio
 
-A responsive personal portfolio built with React + JavaScript and a shadcn/ui-inspired local component structure.
+A responsive editorial portfolio for Maroom Abdalla, focused on AI engineering, backend systems, and full-stack product work.
 
 ## Stack
 
 - React
 - JavaScript
 - Vite
-- shadcn/ui-style local components
 - Lucide React icons
-- Custom responsive CSS
+- Custom responsive CSS and design tokens
+- Intersection Observer reveal animations
 
 ## Run locally
 
@@ -26,9 +26,12 @@ npm run build
 
 ## Update content
 
-- Main page: `src/App.jsx`
-- Experience and skills: `src/data/portfolio.js`
+- Page composition: `src/App.jsx`
+- Profile, projects, experience, and skills: `src/data/portfolio.js`
+- Navigation: `src/components/Navigation.jsx`
+- Project layouts: `src/components/ProjectShowcase.jsx` and `src/components/ProjectVisual.jsx`
+- Case studies: `src/components/CaseStudy.jsx`
+- Scroll reveals: `src/components/Reveal.jsx`
 - Design system and responsive styles: `src/styles.css`
-- UI primitives: `src/components/ui/`
 - CV: `public/Maroom_Abdalla_CV.pdf`
 # marooms-portfolio
