@@ -348,14 +348,62 @@ body{background:var(--paper);color:var(--ink)}
 @media(max-width:560px){.hero-system-wrap{width:78vw}.agent-preview{padding:9px}.agent-flow{gap:3px}.agent-node{padding:5px 3px}.agent-node strong{font-size:6px}.agent-node small{font-size:4px}.agent-preview-title{font-size:16px}.hero-skill-note{width:29%}}
 @media(prefers-reduced-motion:reduce){.hero{min-height:auto}.hero-system-wrap{width:100%;transform:none!important}.laptop-lid{transform:none!important}.laptop-editor{opacity:0!important}.laptop-live-preview{opacity:1!important}}
 
-/* V12 — targeted visual corrections: taller screen, centered sticky stage, clean navigation. */
-.nav-wrap{background:rgba(248,245,242,.97);border-bottom:1px solid rgba(70,52,61,.12);box-shadow:0 5px 20px rgba(36,28,35,.065);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-.nav-wrap.is-scrolled,.nav-wrap.is-open{background:rgba(248,245,242,.98);box-shadow:0 7px 24px rgba(36,28,35,.09)}
-.hero-path{display:none!important}
-.hero-system-wrap{left:75%;top:61%;width:min(520px,42vw);transform:none;transform-origin:center;z-index:5}
-.laptop-lid{transform:scaleY(.89);transform-origin:center bottom}
-.laptop-display{aspect-ratio:16/10!important}
-.agent-preview{padding:clamp(14px,2vw,29px)}
-@media(max-width:780px){.hero-system-wrap{left:75%;top:61%;width:min(76vw,460px);transform:none}.laptop-display{aspect-ratio:16/10!important}}
-@media(max-width:560px){.hero-system-wrap{width:78vw}.agent-preview{padding:10px}}
-@media(prefers-reduced-motion:reduce){.hero-system-wrap{position:relative;left:auto;top:auto;width:100%;transform:none!important}.laptop-lid{transform:none!important}}
+/* V11 mobile repair — mobile is intentionally recomposed, not a squeezed desktop scene. */
+@media (max-width:780px){
+  html,body,#root,.site-shell{max-width:100%;overflow-x:hidden}
+  .nav-wrap{z-index:200;background:rgba(248,245,242,.96);box-shadow:0 8px 28px rgba(70,52,61,.10);backdrop-filter:blur(12px)}
+  .mobile-navigation{z-index:199;inset:70px 0 0;overflow-y:auto;background:#F8F5F2}
+  .nav-wrap.is-open .mobile-navigation{transform:none}
+  body.menu-is-open{overflow:hidden}
+
+  .hero{min-height:auto!important;overflow:visible!important;padding:0!important}
+  .hero-layout{position:relative!important;top:auto!important;height:auto!important;min-height:0!important;overflow:visible!important;display:flex!important;flex-direction:column;padding:105px 18px 72px!important;gap:46px}
+  .hero-copy-block{position:relative!important;inset:auto!important;left:auto!important;right:auto!important;top:auto!important;width:100%!important;max-width:620px!important;opacity:1!important;transform:none!important;order:1}
+  .hero h1{font-size:clamp(48px,13vw,72px)!important;line-height:.86!important;max-width:100%;overflow-wrap:normal}
+  .hero-intro{max-width:34rem;font-size:15px!important;line-height:1.55!important}
+  .hero-system-wrap{position:relative!important;inset:auto!important;left:auto!important;top:auto!important;width:min(94vw,560px)!important;max-width:100%!important;margin:0 auto!important;transform:none!important;order:2;z-index:5}
+  .build-laptop{width:100%;transform:none!important}
+  .laptop-lid{transform:scaleY(1)!important;transform-origin:center bottom!important}
+  .laptop-display{aspect-ratio:16/10}
+  .agent-preview{padding:clamp(12px,3vw,22px)}
+  .agent-preview-title{font-size:clamp(20px,5.8vw,30px)}
+  .agent-node strong{font-size:clamp(8px,2.2vw,11px)}
+  .agent-node small{font-size:5px}
+  .hero-preview-label,.hero-preview-foot{font-size:7px}
+  .laptop-undertext{font-size:6px;gap:8px}
+
+  .hero-skill-stream{position:relative!important;inset:auto!important;order:3;display:grid!important;grid-template-columns:1fr 1fr;gap:14px;width:100%;pointer-events:auto;margin-top:-10px}
+  .hero-skill-note,.hero-skill-note.skill-left,.hero-skill-note.skill-right,.hero-skill-note[data-skill-step]{position:relative!important;inset:auto!important;left:auto!important;right:auto!important;top:auto!important;width:auto!important;min-width:0;visibility:visible!important;opacity:1!important;transform:none!important;padding:14px 12px!important;background:#F8F5F2;border:1px solid rgba(70,52,61,.16);border-top:2px solid #46343D}
+  .hero-skill-note:after{display:none}
+  .hero-skill-note b{font-size:clamp(16px,4.5vw,21px)!important;line-height:1.05}
+  .hero-skill-note p{font-size:7px!important;line-height:1.45!important;overflow-wrap:anywhere}
+  .scroll-invitation{display:none!important}
+  .narrative-rail{display:none!important}
+
+  .projects:before{display:none}
+  .projects{padding-top:90px!important}
+  .project-story,.project-story.is-reverse{display:flex!important;flex-direction:column!important;gap:28px!important}
+  .project-media,.project-story.is-reverse .project-media{order:1!important;width:100%;transform:none!important;opacity:1!important}
+  .project-copy,.project-story.is-reverse .project-copy{order:2!important;width:100%}
+  .project-preview{width:100%;box-sizing:border-box}
+  .details-link{min-height:48px;width:100%;justify-content:space-between}
+
+  .case-overlay{z-index:1000!important;overscroll-behavior:contain}
+  .case-close{z-index:1002;top:84px;right:16px;width:46px;height:46px}
+  .case-hero{padding-top:150px}
+}
+@media (max-width:560px){
+  .hero-layout{padding-inline:14px!important;gap:36px}
+  .hero h1{font-size:clamp(45px,13.2vw,61px)!important}
+  .identity-switcher{gap:7px}
+  .hero-actions{width:100%}
+  .hero-actions .primary-link{width:100%;justify-content:space-between}
+  .hero-system-wrap{width:100%!important}
+  .hero-skill-stream{grid-template-columns:1fr 1fr;gap:10px}
+  .hero-skill-note{padding:12px 10px!important}
+  .hero-skill-note b{font-size:16px!important}
+  .agent-flow{gap:3px}
+  .agent-node{padding:7px 4px}
+  .agent-node strong{font-size:7px}
+  .agent-preview-foot{font-size:6px}
+}

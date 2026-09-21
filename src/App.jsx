@@ -134,7 +134,7 @@ function Hero({ onOpen }) {
   }, [])
 
   return <section className="hero" id="home" ref={heroRef}>
-    <div className="hero-custard-field" aria-hidden="true" />
+    <div className="hero-custard-field" aria-hidden="true" /><div className="hero-path" aria-hidden="true"><i className="hero-path-progress" /><b /></div>
     <div className="container hero-layout"><div className="hero-copy-block"><p className="hero-kicker"><span>maroom.</span><span>Portfolio / 2026</span></p>
       <div className="identity-switcher" aria-label={`Professional identity: ${roles[role]}`}>{roles.map((item, index) => <button className={`identity-option ${role === index ? 'is-active' : ''}`} onClick={() => scramble(index)} key={item}><i />{item}</button>)}</div>
       <p className="hero-live-role" aria-live="off"><span className="live-indicator" />{displayRole}<span className="type-caret" /></p>
@@ -148,7 +148,7 @@ function Hero({ onOpen }) {
 
 function Projects({ onOpen }) {
   return <section className="page-section projects" id="projects"><div className="container"><SectionHeader index="01" label="SELECTED WORK" title="Systems in practice." subtitle="Real applications where product thinking, engineering, and AI meet." /><div className="project-list">
-    {projects.map((project, index) => <article className={`project-story ${index % 2 ? 'is-reverse' : ''}`} data-project-index={index} key={project.slug}><button className="project-media" onClick={() => onOpen(project)} aria-label={`Open ${project.title} case study`}><ProjectPreview project={project} /></button><Reveal className="project-copy"><p className="project-index"><span>{project.number}</span>{project.subtitle}</p><h3>{project.title}</h3><p>{project.description}</p><ul>{project.technologies.map((technology) => <li key={technology}>{technology}</li>)}</ul><button className="details-link" onClick={() => onOpen(project)}>View case study <ArrowRight /></button></Reveal></article>)}
+    {projects.map((project, index) => <article className={`project-story ${index % 2 ? 'is-reverse' : ''}`} data-project-index={index} key={project.slug}><button type="button" className="project-media" onClick={(event) => { event.preventDefault(); event.stopPropagation(); onOpen(project) }} aria-label={`Open ${project.title} case study`}><ProjectPreview project={project} /></button><Reveal className="project-copy"><p className="project-index"><span>{project.number}</span>{project.subtitle}</p><h3>{project.title}</h3><p>{project.description}</p><ul>{project.technologies.map((technology) => <li key={technology}>{technology}</li>)}</ul><button type="button" className="details-link" onClick={(event) => { event.preventDefault(); event.stopPropagation(); onOpen(project) }}>View case study <ArrowRight /></button></Reveal></article>)}
   </div><div className="project-skill-bridge" aria-hidden="true"><span>Built with</span><i /></div></div></section>
 }
 
