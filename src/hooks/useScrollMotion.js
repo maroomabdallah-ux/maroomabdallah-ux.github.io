@@ -20,7 +20,7 @@ export function useScrollMotion(rootRef) {
       // Desktop and mobile use separate coordinates so the same story remains
       // legible at every size without borrowing desktop positioning on phones.
       mm.add('(min-width: 781px)', () => {
-        gsap.set(laptop, { left: '75%', top: '61%', scale: .82, xPercent: -50, yPercent: -50 })
+        gsap.set(laptop, { left: '73%', top: '57%', scale: .9, xPercent: -50, yPercent: -50 })
         gsap.set(lid, { scaleY: .77, transformOrigin: 'center bottom', rotateX: 0 })
         gsap.set(notes, { autoAlpha: 0, y: 12 })
         gsap.set('.build-laptop', { '--build': .08 })
@@ -30,7 +30,7 @@ export function useScrollMotion(rootRef) {
         } })
         heroStory
           .to('.hero-copy-block', { autoAlpha: 0, y: -25, duration: .23 }, .08)
-          .to(laptop, { left: '50%', top: '63%', scale: 1, duration: .32 }, .04)
+          .to(laptop, { left: '50%', top: '50%', scale: 1.1, duration: .34 }, .04)
           .to(lid, { scaleY: 1, rotateX: 0, duration: .32 }, .05)
           .to('.build-laptop', { '--build': .72, duration: .32 }, .08)
           .to('.hero-path-progress', { scaleY: 1, duration: .85 }, 0)
@@ -50,7 +50,7 @@ export function useScrollMotion(rootRef) {
         const preview = root.querySelector('.laptop-live-preview')
         const invitation = root.querySelector('.scroll-invitation')
         gsap.set(copy, { autoAlpha: 1, y: 0 })
-        gsap.set(laptop, { left: '50%', top: '91%', xPercent: -50, yPercent: -50, scale: .58 })
+        gsap.set(laptop, { left: '50%', top: '91%', xPercent: -50, yPercent: -50, scale: .62 })
         gsap.set(lid, { scaleY: .78, transformOrigin: 'center bottom', rotateX: 0 })
         gsap.set(notes, { autoAlpha: 0, y: 14 })
         gsap.set(build, { '--build': .08 })
@@ -62,7 +62,7 @@ export function useScrollMotion(rootRef) {
         } })
         story.to(copy, { autoAlpha: 0, y: -34, duration: .2, pointerEvents: 'none' }, .04)
           .to(invitation, { autoAlpha: 0, duration: .1 }, .06)
-          .to(laptop, { top: '51%', scale: .92, duration: .3 }, .24)
+          .to(laptop, { top: '52%', scale: 1, duration: .32 }, .24)
           .to(lid, { scaleY: 1, duration: .3 }, .24)
           .to(build, { '--build': .75, duration: .36 }, .24)
         notes.forEach((note, index) => story.to(note, {
