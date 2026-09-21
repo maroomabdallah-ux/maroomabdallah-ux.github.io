@@ -17,8 +17,8 @@ export function useScrollMotion(rootRef) {
       const lid = root.querySelector('.laptop-lid')
       const notes = gsap.utils.toArray('.hero-skill-note', root)
 
-      // Desktop keeps the scroll-led laptop story. Mobile gets a deliberately
-      // recomposed, static-first layout so nothing overlaps or hangs off-screen.
+      // Desktop and mobile use separate coordinates so the same story remains
+      // legible at every size without borrowing desktop positioning on phones.
       mm.add('(min-width: 781px)', () => {
         gsap.set(laptop, { left: '75%', top: '61%', scale: .82, xPercent: -50, yPercent: -50 })
         gsap.set(lid, { scaleY: .77, transformOrigin: 'center bottom', rotateX: 0 })
@@ -44,34 +44,33 @@ export function useScrollMotion(rootRef) {
       })
 
       mm.add('(max-width: 780px)', () => {
-        // Mobile has its own reversible scroll story, not a frozen desktop layout.
         const copy = root.querySelector('.hero-copy-block')
         const build = root.querySelector('.build-laptop')
         const editor = root.querySelector('.laptop-editor')
         const preview = root.querySelector('.laptop-live-preview')
         const invitation = root.querySelector('.scroll-invitation')
         gsap.set(copy, { autoAlpha: 1, y: 0 })
-        gsap.set(laptop, { left: '50%', top: '76%', xPercent: -50, yPercent: -50, scale: .72 })
+        gsap.set(laptop, { left: '50%', top: '91%', xPercent: -50, yPercent: -50, scale: .58 })
         gsap.set(lid, { scaleY: .78, transformOrigin: 'center bottom', rotateX: 0 })
         gsap.set(notes, { autoAlpha: 0, y: 14 })
         gsap.set(build, { '--build': .08 })
         gsap.set(editor, { opacity: 1 })
         gsap.set(preview, { opacity: 0 })
         const story = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
-          trigger: '.hero', start: 'top top', end: 'bottom bottom', scrub: .12,
+          trigger: '.hero', start: 'top top', end: 'bottom bottom', scrub: .22,
           invalidateOnRefresh: true,
         } })
-        story.to(copy, { autoAlpha: 0, y: -18, duration: .19 }, .03)
-          .to(laptop, { top: '52%', scale: 1, duration: .32 }, .04)
-          .to(lid, { scaleY: 1, duration: .32 }, .04)
-          .to(build, { '--build': .75, duration: .43 }, .06)
-          .to(invitation, { autoAlpha: 0, duration: .1 }, .08)
+        story.to(copy, { autoAlpha: 0, y: -34, duration: .2, pointerEvents: 'none' }, .04)
+          .to(invitation, { autoAlpha: 0, duration: .1 }, .06)
+          .to(laptop, { top: '51%', scale: .92, duration: .3 }, .24)
+          .to(lid, { scaleY: 1, duration: .3 }, .24)
+          .to(build, { '--build': .75, duration: .36 }, .24)
         notes.forEach((note, index) => story.to(note, {
           autoAlpha: 1, y: 0, duration: .085,
-        }, .43 + index * .075))
-        story.to(build, { '--build': 1, duration: .12 }, .75)
-          .to(preview, { opacity: 1, duration: .12 }, .76)
-          .to(editor, { opacity: 0, duration: .12 }, .76)
+        }, .56 + index * .07))
+        story.to(build, { '--build': 1, duration: .12 }, .84)
+          .to(preview, { opacity: 1, duration: .12 }, .85)
+          .to(editor, { opacity: 0, duration: .12 }, .85)
       })
       mm.add('(min-width: 781px)', () => {
         const firstProject = document.querySelector('.project-story[data-project-index="0"] .project-media')

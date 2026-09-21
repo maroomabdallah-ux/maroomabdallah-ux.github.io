@@ -420,13 +420,18 @@ body{background:var(--paper);color:var(--ink)}
 .projects .project-story .project-preview,
 .projects .project-media .project-preview {
   width: 100%;
+  aspect-ratio: 16 / 10;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   border-radius: 0;
   overflow: hidden;
 }
 .projects .project-preview .preview-stage {
+  min-height: 0;
+  flex: 1;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: auto;
   border-radius: 0;
   overflow: hidden;
 }
@@ -436,3 +441,49 @@ body{background:var(--paper);color:var(--ink)}
   object-fit: contain;
   object-position: center;
 }
+
+/* Final mobile pass: motion stays scroll-driven, but each scene has its own space. */
+@media (max-width:780px) and (prefers-reduced-motion:no-preference) {
+ .hero{min-height:210svh!important;overflow:clip!important}
+ .hero-layout{isolation:isolate}
+ .hero-copy-block{top:clamp(88px,11svh,112px)!important;z-index:4!important;pointer-events:auto}
+ .hero h1{font-size:clamp(32px,8.4vw,49px)!important;line-height:1.02!important}
+ .hero-system-wrap{top:91%;z-index:5!important;pointer-events:none}
+ .hero-skill-stream{z-index:7!important}
+ .hero-skill-note,.hero-skill-note.skill-left,.hero-skill-note.skill-right{width:43%!important;padding:9px 6px!important}
+ .hero-skill-note[data-skill-step="0"],.hero-skill-note[data-skill-step="1"]{top:16%!important}
+ .hero-skill-note[data-skill-step="2"],.hero-skill-note[data-skill-step="3"]{top:79%!important}
+ .hero-skill-note b{font-size:clamp(12px,3.3vw,17px)!important}
+ .hero-skill-note p{font-size:clamp(7px,1.7vw,9px)!important}
+ .hero-preview-label,.hero-preview-foot{white-space:nowrap}
+}
+@media (max-width:780px) {
+ .projects .project-media,.projects .project-preview{border-radius:0!important}
+ .projects .project-preview{aspect-ratio:16/10!important;min-height:0!important;padding:7px!important}
+ .projects .preview-chrome{height:22px!important}
+ .projects .preview-stage{aspect-ratio:auto!important;height:auto!important;border-radius:0!important}
+ .projects .preview-stage img{object-fit:contain!important;object-position:center!important}
+ .case-overlay{inset:0!important;overflow-x:hidden!important;overscroll-behavior:contain}
+ .case-study{padding-bottom:38px}
+ .case-close{position:fixed!important;top:calc(env(safe-area-inset-top,0px) + 14px)!important;right:16px!important;width:40px!important;height:40px!important;border-radius:50%;z-index:1003!important}
+ .case-hero{padding-top:84px!important;padding-bottom:25px!important}
+ .case-hero h2{font-size:clamp(39px,10vw,65px)!important;line-height:.98!important;overflow-wrap:anywhere}
+ .case-intro{margin:25px 0 20px!important;font-size:clamp(20px,5.2vw,28px)!important}
+ .case-visual{aspect-ratio:16/10!important;max-height:none!important;padding:5px!important}
+ .project-screen{padding:5px!important}
+ .browser-bar{height:18px!important}
+ .gallery-controls{padding-top:12px!important}
+ .gallery-controls button{width:40px!important;height:40px!important}
+ .case-body{padding-top:35px!important;gap:28px!important}
+ .case-thumbnails{margin-top:30px!important}
+ .case-thumbnails button{flex-basis:115px!important;height:70px!important}
+ .case-end{margin-top:35px!important}
+}
+@media (max-width:560px) {
+ .case-body{display:block!important}
+ .case-body section{grid-template-columns:1fr!important;gap:10px!important;margin-bottom:28px}
+ .case-features ol{grid-template-columns:1fr!important}
+ .case-end{align-items:flex-start;gap:20px;flex-direction:column}
+ .contact-email{font-size:clamp(18px,5.5vw,25px);overflow-wrap:anywhere}
+}
+.case-overlay .case-end{background:transparent;color:var(--ink)}

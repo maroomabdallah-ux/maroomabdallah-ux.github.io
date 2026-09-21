@@ -1,23 +1,40 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ArrowLeft, ArrowRight, X } from 'lucide-react'
 import { ProjectVisual } from './ProjectVisual'
 
 export function CaseStudy({ project, onClose }) {
   const [activeImage, setActiveImage] = useState(0)
+  const closeRef = useRef(null)
+  const dialogRef = useRef(null)
   const images = project.images || []
 
   useEffect(() => {
     const previous = document.body.style.overflow
+    const previousFocus = document.activeElement
     document.body.style.overflow = 'hidden'
+    closeRef.current?.focus()
     const onKey = (event) => {
       if (event.key === 'Escape') onClose()
       if (images.length && event.key === 'ArrowRight') setActiveImage((value) => (value + 1) % images.length)
       if (images.length && event.key === 'ArrowLeft') setActiveImage((value) => (value - 1 + images.length) % images.length)
+      if (event.key === 'Tab') {
+        const controls = [...dialogRef.current.querySelectorAll('button, a[href], input, textarea, [tabindex]:not([tabindex="-1"])')]
+        const first = controls[0]
+        const last = controls.at(-1)
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus() }
+        if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus() }
+      }
     }
     window.addEventListener('keydown', onKey)
-    return () => { document.body.style.overflow = previous; window.removeEventListener('keydown', onKey) }
+    return () => {
+      document.body.style.overflow = previous
+      window.removeEventListener('keydown', onKey)
+      previousFocus?.focus?.()
+    }
   }, [images.length, onClose])
+
+  useEffect(() => setActiveImage(0), [project.slug])
 
   const visualProject = images.length ? { ...project, coverImage: images[activeImage] } : project
   const sections = [
@@ -31,9 +48,9 @@ export function CaseStudy({ project, onClose }) {
     ['Outcome / what I learned', project.outcome],
   ].filter(([, value]) => value)
 
-  return createPortal(<div className="case-overlay" role="dialog" aria-modal="true" aria-labelledby="case-title">
+  return createPortal(<div ref={dialogRef} className="case-overlay" role="dialog" aria-modal="true" aria-labelledby="case-title">
     <div className="case-study">
-      <button type="button" className="case-close" onClick={onClose} aria-label="Close case study"><X /></button>
+      <button ref={closeRef} type="button" className="case-close" onClick={onClose} aria-label="Close case study"><X /></button>
       <header className="case-hero container">
         <p className="case-label">Case study / {project.number}</p>
         <h2 id="case-title">{project.title}</h2>
