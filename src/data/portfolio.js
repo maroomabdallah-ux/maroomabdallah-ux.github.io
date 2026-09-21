@@ -40,7 +40,7 @@ export const projects = [
   {
     number: '01', slug: 'career-pilot', title: 'CareerPilot', subtitle: 'AI-Powered Career Platform', kind: 'concept', monogram: 'CP', featured: true,
     description: "An intelligent career platform that turns a user's CV, preferences, and location into personalized real-world job opportunities.",
-    images: careerPilotImages, imageAlt: 'CareerPilot AI-powered career platform interface',
+    coverImage: careerPilotImages[0], images: careerPilotImages, imageAlt: 'CareerPilot AI-powered career platform interface',
     technologies: ['AI / LLM', 'Job APIs', 'Intelligent Ranking', 'Backend Architecture'],
     overview: 'CareerPilot connects profile understanding with real job data to make career discovery more relevant, personal, and useful.',
     problem: 'Job discovery is noisy. Generic search results rarely account for a candidate’s actual experience, preferences, or location.',
@@ -53,7 +53,7 @@ export const projects = [
   {
     number: '02', slug: 'mini-erp', title: 'Mini ERP', subtitle: 'AI-Powered Business Management System', kind: 'agent', monogram: 'ERP', featured: true,
     description: 'A full-stack ERP platform that brings business operations together with an integrated AI agent for intelligent, conversational interaction.',
-    images: miniErpImages, imageAlt: 'Mini ERP business management platform with its integrated AI agent',
+    coverImage: miniErpImages[0], images: miniErpImages, imageAlt: 'Mini ERP business management platform with its integrated AI agent',
     technologies: ['FastAPI', 'Python', 'React', 'TypeScript', 'PostgreSQL', 'Docker', 'AI Agents'],
     overview: 'A connected business management platform that unifies core ERP workflows with a secure, role-aware AI agent inside the same system.',
     problem: 'Disconnected business tools create repeated entry and limited visibility, while giving an AI model unrestricted access to operational data would introduce serious security and control risks.',
@@ -69,7 +69,7 @@ export const projects = [
   {
     number: '03', slug: 'cartly', title: 'Cartly', subtitle: 'Full-Stack E-Commerce Platform',
     description: 'A modern shopping product with product discovery, cart workflows, secure purchasing, orders, and responsive customer experiences.',
-    images: ['/projects/cartly.png', '/projects/cartly-products.png', '/projects/cartly-cart.png', '/projects/cartly-payment.png', '/projects/cartly-orders.png', '/projects/cartly-email.png'], imageAlt: 'Cartly e-commerce storefront', technologies: ['React', 'Python', 'FastAPI', 'Docker', 'PostgreSQL'],
+    coverImage: '/projects/cartly.png', images: ['/projects/cartly.png', '/projects/cartly-products.png', '/projects/cartly-cart.png', '/projects/cartly-payment.png', '/projects/cartly-orders.png', '/projects/cartly-email.png'], imageAlt: 'Cartly e-commerce storefront', technologies: ['React', 'Python', 'FastAPI', 'Docker', 'PostgreSQL'],
     overview: 'A connected commerce experience spanning product discovery through purchase confirmation.', role: 'Full-stack product development.', features: ['Product browsing', 'Cart workflow', 'Payment flow', 'Order management', 'Email communication'], outcome: 'A practical study in stateful customer journeys and connected frontend/backend workflows.',
   },
   {

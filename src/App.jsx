@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 import { ArrowRight, ArrowUp, ArrowUpRight, Download, GraduationCap, MapPin, Send } from 'lucide-react'
 import { Navigation } from './components/Navigation'
 import { CaseStudy } from './components/CaseStudy'
 import { ProjectPreview } from './components/ProjectPreview'
+import { BuildLaptop } from './components/BuildLaptop'
 import { Reveal } from './components/Reveal'
 import { GithubIcon, LinkedinIcon } from './components/SocialIcons'
 import { experience, profile, projects, skills } from './data/portfolio'
@@ -34,55 +38,111 @@ function NarrativeRail() {
 function Hero({ onOpen }) {
   const heroRef = useRef(null)
   const [role, setRole] = useState(0)
+  const [displayRole, setDisplayRole] = useState(roles[0])
   useEffect(() => {
     const hero = heroRef.current
     if (!hero) return undefined
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const touch = window.matchMedia('(pointer: coarse)').matches
-    const seen = sessionStorage.getItem('maroom-intro-seen')
-    let context
-    let stop
-    if (!reduce && !touch && !seen) {
-      context = gsap.context(() => {
-        const cursor = hero.querySelector('.virtual-cursor')
-        const buttons = [...hero.querySelectorAll('.identity-option')]
-        const heading = hero.querySelector('.hero-heading')
-        const workLink = hero.querySelector('.primary-link')
-        const point = (element) => { const a = element.getBoundingClientRect(); const b = hero.getBoundingClientRect(); return { x: a.left - b.left + a.width * .7, y: a.top - b.top + a.height * .55 } }
-        gsap.set(cursor, { ...point(buttons[0]), xPercent: -15, yPercent: -10, opacity: 0 })
-        const tl = gsap.timeline({ delay: .55, onComplete: () => sessionStorage.setItem('maroom-intro-seen', '1') })
-        tl.to(cursor, { opacity: 1, duration: .25 })
-        buttons.forEach((button, index) => {
-          tl.to(cursor, { ...point(button), duration: .62, ease: 'power3.inOut' })
-            .to(cursor, { scale: .72, duration: .1 })
-            .call(() => setRole(index))
-            .fromTo(button, { '--click-ring': 0 }, { '--click-ring': 1, duration: .25 }, '<')
-            .to(cursor, { scale: 1, duration: .16 })
-        })
-        tl.to(cursor, { ...point(heading), duration: .55, ease: 'power3.inOut' })
-          .to(cursor, { ...point(workLink), duration: .62, ease: 'power3.inOut' })
-          .to(workLink, { scale: .97, duration: .12 })
-          .to(workLink, { scale: 1, duration: .16 })
-          .to(cursor, { opacity: 0, duration: .35 })
-        stop = () => { tl.progress(1); setRole(2) }
-        window.addEventListener('wheel', stop, { once: true, passive: true })
-        window.addEventListener('pointerdown', stop, { once: true, passive: true })
-      }, hero)
-    } else if (!reduce) {
-      const timer = window.setInterval(() => setRole((value) => (value + 1) % roles.length), 2200)
-      return () => window.clearInterval(timer)
+    const cursor = hero.querySelector('.virtual-cursor')
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    let scrambleTween
+    const scramble = (next) => {
+      const target = roles[next]
+      let frame = 0
+      scrambleTween?.kill()
+      scrambleTween = gsap.to({}, { duration: .6, ease: 'none', onUpdate() {
+        frame = Math.min(target.length, Math.floor(this.progress() * (target.length + 2)))
+        setDisplayRole(target.split('').map((letter, i) => letter === ' ' || i < frame ? letter : letters[Math.floor(Math.random() * letters.length)]).join(''))
+      }, onComplete: () => setDisplayRole(target) })
+      setRole(next)
     }
-    return () => { context?.revert(); if (stop) { window.removeEventListener('wheel', stop); window.removeEventListener('pointerdown', stop) } }
+    if (reduce) return undefined
+    if (touch) {
+      // Touch devices get a short, visible identity sequence without a fake mouse pointer.
+      const roleSequence = gsap.timeline({ delay: .25 })
+      ;[1, 2, 0].forEach((index) => roleSequence.call(() => scramble(index)).to({}, { duration: .8 }))
+      return () => { roleSequence.kill(); scrambleTween?.kill() }
+    }
+
+    const buttons = [...hero.querySelectorAll('.identity-option')]
+    const heading = hero.querySelector('.hero-heading')
+    const workLink = hero.querySelector('.primary-link')
+    const point = (element) => {
+      const rect = element.getBoundingClientRect()
+      return { x: rect.left + rect.width * .7, y: rect.top + rect.height * .55 }
+    }
+    const railPoint = () => {
+      const dot = document.querySelector('.narrative-dot')
+      if (dot && getComputedStyle(document.querySelector('.narrative-rail')).display !== 'none') {
+        const rect = dot.getBoundingClientRect()
+        return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
+      }
+      return { x: window.innerWidth - 36, y: window.innerHeight * .5 }
+    }
+    let following = false
+    let timeline
+    let context
+    let raf = 0
+    const follow = () => {
+      if (!following) return
+      const target = railPoint()
+      gsap.to(cursor, { ...target, duration: .55, ease: 'power2.out', overwrite: 'auto' })
+    }
+    const onScroll = () => {
+      if (!following) {
+        timeline?.kill()
+        following = true
+        cursor.classList.add('is-following')
+      }
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(follow)
+    }
+    const finish = () => {
+      following = true
+      cursor.classList.add('is-following')
+      gsap.to(cursor, { ...railPoint(), duration: .85, ease: 'power3.inOut', overwrite: 'auto' })
+    }
+    context = gsap.context(() => {
+      gsap.set(cursor, { ...point(buttons[0]), xPercent: -15, yPercent: -10, opacity: 1 })
+      if (window.scrollY > 80) {
+        finish()
+        return
+      }
+      timeline = gsap.timeline({ delay: .35, onComplete: finish })
+      buttons.forEach((button, index) => {
+        timeline.to(cursor, { ...point(button), duration: .68, ease: 'power2.inOut' })
+          .to(cursor, { scale: .72, duration: .1 })
+          .call(() => scramble(index))
+          .fromTo(button, { '--click-ring': 0 }, { '--click-ring': 1, duration: .25 }, '<')
+          .to(cursor, { scale: 1, duration: .16 })
+      })
+      timeline.to(cursor, { ...point(heading), duration: .75, ease: 'power2.inOut' })
+        .to(cursor, { ...point(workLink), duration: .75, ease: 'power2.inOut' })
+        .to(workLink, { scale: .97, duration: .12 })
+        .to(workLink, { scale: 1, duration: .16 })
+    }, hero)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      cancelAnimationFrame(raf)
+      scrambleTween?.kill()
+      context?.revert()
+    }
   }, [])
 
   return <section className="hero" id="home" ref={heroRef}>
-    <div className="hero-custard-field" aria-hidden="true" /><div className="hero-path" aria-hidden="true"><i className="hero-path-progress" /><b /></div>
+    <div className="hero-custard-field" aria-hidden="true" />
     <div className="container hero-layout"><div className="hero-copy-block"><p className="hero-kicker"><span>maroom.</span><span>Portfolio / 2026</span></p>
-      <div className="identity-switcher" aria-label={`Professional identity: ${roles[role]}`}>{roles.map((item, index) => <button className={`identity-option ${role === index ? 'is-active' : ''}`} onClick={() => setRole(index)} key={item}><i />{item}</button>)}</div>
-      <h1 className="hero-heading">Engineering systems<br />with <em>intelligence.</em></h1><p className="hero-intro">I’m Maroom Abdalla, an AI and full-stack engineer building agentic workflows, reliable backends, and focused digital products.</p>
+      <div className="identity-switcher" aria-label={`Professional identity: ${roles[role]}`}>{roles.map((item, index) => <button className={`identity-option ${role === index ? 'is-active' : ''}`} onClick={() => scramble(index)} key={item}><i />{item}</button>)}</div>
+      <p className="hero-live-role" aria-live="off"><span className="live-indicator" />{displayRole}<span className="type-caret" /></p>
+      <h1 className="hero-heading">Turning ideas into<br /><em>intelligent experiences.</em></h1><p className="hero-intro">I’m Maroom Abdalla. I build AI-powered systems, reliable backends, and thoughtful web experiences.</p>
       <div className="hero-actions"><a className="primary-link" href="#projects">Explore my work <ArrowRight /></a><a className="text-link" href={profile.cv} target="_blank" rel="noreferrer"><Download /> Download CV</a></div></div>
-      <div className="hero-system-wrap"><SystemCanvas /></div>
-    </div><div className="virtual-cursor" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M2 2v21l5.3-5.1 3.8 8 4-2-3.8-7.6H19L2 2Z" /></svg><span>explore</span></div>
+      <div className="hero-system-wrap"><div className="hero-preview-label"><span>THE BUILD / 001</span><span>AI AGENT / CONCEPT ↗</span></div><BuildLaptop /><div className="hero-preview-foot">SCROLL TO BUILD THE STACK <ArrowRight size={15} /></div></div>
+      <div className="hero-skill-stream" aria-hidden="true">{skills.map((group, index) => <div className={`hero-skill-note ${index % 2 ? 'skill-right' : 'skill-left'}`} data-skill-step={index} key={group.title}><span>0{index + 1}</span><div><b>{group.title}</b><p>{group.items.slice(0, 4).join(' · ')}</p></div></div>)}</div>
+    </div><a className="scroll-invitation" href="#projects" aria-label="Scroll to selected work"><span>SCROLL TO EXPLORE</span><i><ArrowRight size={17} /></i></a><div className="virtual-cursor" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M2 2v21l5.3-5.1 3.8 8 4-2-3.8-7.6H19L2 2Z" /></svg><span>explore</span></div>
   </section>
 }
 
