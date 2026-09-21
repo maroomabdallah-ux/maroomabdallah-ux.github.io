@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 
-const items = [['Home', 'home'], ['About', 'about'], ['Skills', 'skills'], ['Projects', 'projects'], ['Experience', 'experience'], ['Education', 'education'], ['Contact', 'contact']]
+const items = [['Home', 'home'], ['Work', 'projects'], ['Skills', 'skills'], ['Experience', 'experience'], ['Education', 'education'], ['Contact', 'contact']]
 
 export function Navigation() {
   const [open, setOpen] = useState(false)

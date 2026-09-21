@@ -1,452 +1,121 @@
-import { useState } from "react";
-import {
-  ArrowRight,
-  ArrowUp,
-  ArrowUpRight,
-  Download,
-  GraduationCap,
-  Mail,
-  MapPin,
-  Send,
-  Sparkles,
-} from "lucide-react";
-import { Navigation } from "./components/Navigation";
-import { CaseStudy } from "./components/CaseStudy";
-import { ProjectPreview } from "./components/ProjectPreview";
-import { Reveal } from "./components/Reveal";
-import { GithubIcon, LinkedinIcon } from "./components/SocialIcons";
-import { experience, profile, projects, skills } from "./data/portfolio";
-import { useScrollMotion } from "./hooks/useScrollMotion";
-import "./styles.css";
+import { useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
+import { ArrowRight, ArrowUp, ArrowUpRight, Download, GraduationCap, MapPin, Send } from 'lucide-react'
+import { Navigation } from './components/Navigation'
+import { CaseStudy } from './components/CaseStudy'
+import { ProjectPreview } from './components/ProjectPreview'
+import { Reveal } from './components/Reveal'
+import { GithubIcon, LinkedinIcon } from './components/SocialIcons'
+import { experience, profile, projects, skills } from './data/portfolio'
+import { useScrollMotion } from './hooks/useScrollMotion'
+import './styles.css'
+
+const roles = ['AI Engineer', 'Full-Stack Web Developer', 'Backend Developer']
 
 function SectionHeader({ index, label, title, subtitle }) {
-  return (
-    <Reveal className="section-header">
-      <p className="section-eyebrow">
-        <span>{index}</span> / {label}
-      </p>
-      <h2>{title}</h2>
-      <p>{subtitle}</p>
-    </Reveal>
-  );
+  return <Reveal className="section-header"><p className="section-eyebrow"><span>{index}</span> / {label}</p><h2>{title}</h2><p>{subtitle}</p></Reveal>
 }
 
-function Hero() {
-  return (
-    <section className="hero" id="home">
-      <div className="hero-grain" aria-hidden="true" />
-      <div className="container hero-content">
-        <div className="hero-kicker"><span>Independent portfolio / 2026</span><span>Amman, Jordan</span></div>
-        <div className="hero-title-wrap" data-scroll-motion>
-          <h1><span>Building digital</span><em>experiences.</em></h1>
-          <div className="hero-seal" aria-hidden="true"><Sparkles /><span>AI<br />BACKEND<br />SYSTEMS</span></div>
-        </div>
-        <div className="hero-bottom">
-          <div><p className="hero-name">Maroom Abdalla</p><p className="hero-role">AI &amp; Backend Engineer</p></div>
-          <p className="hero-copy">I shape intelligent applications, agentic workflows, and scalable backend systems into focused digital products.</p>
-          <a className="circle-link" href="#projects" aria-label="Explore selected work"><ArrowRight /><span>Explore<br />work</span></a>
-        </div>
-        <a className="scroll-cue" href="#about"><i /> Scroll to discover</a>
-      </div>
-    </section>
-  );
+function SystemCanvas() {
+  return <div className="stack-story" aria-label="A product moving through the full-stack engineering process">
+    <div className="stack-story-head"><span>PRODUCT SYSTEM / 001</span><i>FROM IDEA TO REALITY</i></div>
+    <div className="stack-window story-interface"><small>01 — EXPERIENCE</small><div className="mini-nav"><i /><i /><i /></div><div className="mini-hero"><b>Useful ideas,<br />made tangible.</b><span /></div></div>
+    <div className="stack-code story-backend"><small>02 — APPLICATION LAYER</small><p><em>POST</em> /api/agent/run</p><p><em>GET</em> /api/products</p><p><b>def</b> build_useful_system():</p><p>&nbsp;&nbsp;return <mark>clarity + logic</mark></p></div>
+    <div className="stack-data story-intelligence"><small>03 — INTELLIGENCE + DATA</small><div><span>context</span><i>→</i><span>agent</span><i>→</i><span>action</span></div><p>PostgreSQL · tools · guardrails</p></div>
+    <div className="story-signal" aria-hidden="true"><span /><i /></div>
+    <p className="system-caption"><b>Full-stack, with intelligence built in.</b><span>Designing the complete journey—not an isolated layer.</span></p>
+  </div>
 }
 
-function About() {
-  return (
-    <section className="page-section about" id="about">
-      <div className="container">
-        <SectionHeader
-          index="01"
-          label="ABOUT"
-          title="About Me"
-          subtitle="Get to know the engineer behind the systems."
-        />
-        <div className="about-grid">
-          <Reveal className="about-profile">
-            <h3>I connect backend engineering with practical AI.</h3>
-            <p>
-              I’m a Computer Science graduate focused on AI engineering, backend
-              development, and intelligent software systems.
-            </p>
-            <p>
-              I build AI-powered applications, agentic workflows, APIs,
-              database-driven systems, and full-stack products—with a strong
-              focus on software that solves real-world problems.
-            </p>
-            <div className="profile-links">
-              <span>
-                <MapPin /> Amman, Jordan
-              </span>
-              <a href={`mailto:${profile.email}`}>
-                <Mail /> {profile.email}
-              </a>
-              <a href={profile.cv} target="_blank" rel="noreferrer">
-                <Download /> Download CV
-              </a>
-            </div>
-          </Reveal>
-        <div className="stats-grid" data-scroll-motion>
-            <Reveal className="stat-card" delay={60}>
-              <strong>
-                AI +<br />
-                BACKEND
-              </strong>
-              <span>Primary Focus</span>
-            </Reveal>
-            <Reveal className="stat-card" delay={120}>
-              <strong>4+</strong>
-              <span>Major Projects</span>
-            </Reveal>
-            <Reveal className="stat-card" delay={180}>
-              <strong>10+</strong>
-              <span>Technologies</span>
-            </Reveal>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+function NarrativeRail() {
+  return <aside className="narrative-rail" aria-hidden="true"><div className="narrative-track"><i className="narrative-progress" /><b className="narrative-dot" /></div><span data-stage="projects">work</span><span data-stage="skills">tools</span><span data-stage="experience">path</span><span data-stage="contact">connect</span></aside>
 }
 
-function Skills() {
-  return (
-    <section className="page-section skills" id="skills">
-      <div className="container">
-        <SectionHeader
-          index="02"
-          label="SKILLS"
-          title="My Tech Stack"
-          subtitle="Technologies and tools I use to build intelligent systems."
-        />
-        <div className="skills-grid">
-          {skills.map((group, index) => {
-            return (
-              <Reveal
-                as="article"
-                className="skill-card"
-                delay={index * 70}
-                key={group.title}
-              >
-                <span className="card-number">0{index + 1}</span>
-                <h3>{group.title}</h3>
-                <p>{group.description}</p>
-                <ul>
-                  {group.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </Reveal>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
+function Hero({ onOpen }) {
+  const heroRef = useRef(null)
+  const [role, setRole] = useState(0)
+  useEffect(() => {
+    const hero = heroRef.current
+    if (!hero) return undefined
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const touch = window.matchMedia('(pointer: coarse)').matches
+    const seen = sessionStorage.getItem('maroom-intro-seen')
+    let context
+    let stop
+    if (!reduce && !touch && !seen) {
+      context = gsap.context(() => {
+        const cursor = hero.querySelector('.virtual-cursor')
+        const buttons = [...hero.querySelectorAll('.identity-option')]
+        const heading = hero.querySelector('.hero-heading')
+        const workLink = hero.querySelector('.primary-link')
+        const point = (element) => { const a = element.getBoundingClientRect(); const b = hero.getBoundingClientRect(); return { x: a.left - b.left + a.width * .7, y: a.top - b.top + a.height * .55 } }
+        gsap.set(cursor, { ...point(buttons[0]), xPercent: -15, yPercent: -10, opacity: 0 })
+        const tl = gsap.timeline({ delay: .55, onComplete: () => sessionStorage.setItem('maroom-intro-seen', '1') })
+        tl.to(cursor, { opacity: 1, duration: .25 })
+        buttons.forEach((button, index) => {
+          tl.to(cursor, { ...point(button), duration: .62, ease: 'power3.inOut' })
+            .to(cursor, { scale: .72, duration: .1 })
+            .call(() => setRole(index))
+            .fromTo(button, { '--click-ring': 0 }, { '--click-ring': 1, duration: .25 }, '<')
+            .to(cursor, { scale: 1, duration: .16 })
+        })
+        tl.to(cursor, { ...point(heading), duration: .55, ease: 'power3.inOut' })
+          .to(cursor, { ...point(workLink), duration: .62, ease: 'power3.inOut' })
+          .to(workLink, { scale: .97, duration: .12 })
+          .to(workLink, { scale: 1, duration: .16 })
+          .to(cursor, { opacity: 0, duration: .35 })
+        stop = () => { tl.progress(1); setRole(2) }
+        window.addEventListener('wheel', stop, { once: true, passive: true })
+        window.addEventListener('pointerdown', stop, { once: true, passive: true })
+      }, hero)
+    } else if (!reduce) {
+      const timer = window.setInterval(() => setRole((value) => (value + 1) % roles.length), 2200)
+      return () => window.clearInterval(timer)
+    }
+    return () => { context?.revert(); if (stop) { window.removeEventListener('wheel', stop); window.removeEventListener('pointerdown', stop) } }
+  }, [])
+
+  return <section className="hero" id="home" ref={heroRef}>
+    <div className="hero-custard-field" aria-hidden="true" /><div className="hero-path" aria-hidden="true"><i className="hero-path-progress" /><b /></div>
+    <div className="container hero-layout"><div className="hero-copy-block"><p className="hero-kicker"><span>maroom.</span><span>Portfolio / 2026</span></p>
+      <div className="identity-switcher" aria-label={`Professional identity: ${roles[role]}`}>{roles.map((item, index) => <button className={`identity-option ${role === index ? 'is-active' : ''}`} onClick={() => setRole(index)} key={item}><i />{item}</button>)}</div>
+      <h1 className="hero-heading">Engineering systems<br />with <em>intelligence.</em></h1><p className="hero-intro">I’m Maroom Abdalla, an AI and full-stack engineer building agentic workflows, reliable backends, and focused digital products.</p>
+      <div className="hero-actions"><a className="primary-link" href="#projects">Explore my work <ArrowRight /></a><a className="text-link" href={profile.cv} target="_blank" rel="noreferrer"><Download /> Download CV</a></div></div>
+      <div className="hero-system-wrap"><SystemCanvas /></div>
+    </div><div className="virtual-cursor" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M2 2v21l5.3-5.1 3.8 8 4-2-3.8-7.6H19L2 2Z" /></svg><span>explore</span></div>
+  </section>
 }
 
 function Projects({ onOpen }) {
-  return (
-    <section className="page-section projects" id="projects">
-      <div className="container">
-        <SectionHeader
-          index="03"
-          label="PROJECTS"
-          title="Featured Projects"
-          subtitle="Intelligent systems and applications I’ve built."
-        />
-        <div className="project-list">
-          {projects.map((project, index) => (
-            <Reveal
-              as="article"
-              className={`project-card ${index % 2 ? 'is-reverse' : ''}`}
-              delay={(index % 3) * 70}
-              key={project.slug}
-            >
-              <button
-                className="project-card-open"
-                onClick={() => onOpen(project)}
-                aria-label={`Open ${project.title} project details`}
-              >
-                <div className="project-media" data-scroll-motion>
-                  <ProjectPreview project={project} />
-                  {project.featured && (
-                    <span className="featured-label">Featured</span>
-                  )}
-                </div>
-                <div className="project-card-body">
-                  <p className="project-category"><span>{project.number}</span>{project.subtitle}</p>
-                  <div className="project-title-row">
-                    <h3>{project.title}</h3>
-                    <ArrowUpRight />
-                  </div>
-                  <p>{project.description}</p>
-                  <ul>
-                    {project.technologies.map((technology) => (
-                      <li key={technology}>{technology}</li>
-                    ))}
-                  </ul>
-                  <span className="details-link">
-                    Project details <ArrowRight />
-                  </span>
-                </div>
-              </button>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  return <section className="page-section projects" id="projects"><div className="container"><SectionHeader index="01" label="SELECTED WORK" title="Systems in practice." subtitle="Real applications where product thinking, engineering, and AI meet." /><div className="project-list">
+    {projects.map((project, index) => <article className={`project-story ${index % 2 ? 'is-reverse' : ''}`} data-project-index={index} key={project.slug}><button className="project-media" onClick={() => onOpen(project)} aria-label={`Open ${project.title} case study`}><ProjectPreview project={project} /></button><Reveal className="project-copy"><p className="project-index"><span>{project.number}</span>{project.subtitle}</p><h3>{project.title}</h3><p>{project.description}</p><ul>{project.technologies.map((technology) => <li key={technology}>{technology}</li>)}</ul><button className="details-link" onClick={() => onOpen(project)}>View case study <ArrowRight /></button></Reveal></article>)}
+  </div><div className="project-skill-bridge" aria-hidden="true"><span>Built with</span><i /></div></div></section>
+}
+
+function Skills() {
+  const [active, setActive] = useState(0)
+  return <section className="page-section skills" id="skills"><div className="container"><SectionHeader index="02" label="CAPABILITIES" title="The tools behind the work." subtitle="A working stack organized by what it helps me build." /><div className="skills-index"><div className="skills-path" aria-hidden="true"><i className="skills-path-fill" /></div>
+    {skills.map((group, index) => <article className={`skill-row ${active === index ? 'is-active' : ''}`} key={group.title}><button onClick={() => setActive(active === index ? -1 : index)} aria-expanded={active === index} aria-controls={`skill-panel-${index}`}><span>0{index + 1}</span><h3>{group.title}</h3><i>{active === index ? '−' : '+'}</i></button><div className="skill-panel" id={`skill-panel-${index}`}><p>{group.description}</p><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></div></article>)}
+  </div></div></section>
 }
 
 function Experience() {
-  return (
-    <section className="page-section experience" id="experience">
-      <div className="container narrow-container">
-        <SectionHeader
-          index="04"
-          label="EXPERIENCE"
-          title="Work Experience"
-          subtitle="My journey building a foundation across AI and software engineering."
-        />
-        <div className="timeline">
-          {experience.map((item, index) => (
-            <Reveal
-              as="article"
-              className="timeline-entry"
-              delay={index * 80}
-              key={item.company}
-            >
-              <div className="timeline-marker">
-                <span>{index + 1}</span>
-              </div>
-              <div className="timeline-card">
-                <div className="timeline-top">
-                  <div>
-                    <p>{item.company}</p>
-                    <h3>{item.role}</h3>
-                  </div>
-                  <time>{item.period}</time>
-                </div>
-                <p className="timeline-summary">{item.summary}</p>
-                <ul>
-                  {item.tags.map((tag) => (
-                    <li key={tag}>{tag}</li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  return <section className="page-section experience" id="experience"><div className="experience-transition" aria-hidden="true" /><div className="container narrow-container"><SectionHeader index="03" label="EXPERIENCE" title="A path built by doing." subtitle="Professional experience across full-stack systems, AI, and backend engineering." /><div className="experience-timeline"><div className="timeline-line" aria-hidden="true"><i className="timeline-progress" /></div>
+    {experience.map((item, index) => <article className="timeline-entry" key={item.company}><span className="timeline-node">{String(index + 1).padStart(2, '0')}</span><div className="timeline-period"><time>{item.period}</time>{item.status && <b>{item.status}</b>}</div><div className="timeline-content"><p>{item.company}</p><h3>{item.role}</h3><span>{item.summary}</span><ul>{item.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul></div></article>)}
+    <a className="timeline-cta" href="#contact"><span>Let’s build what’s next</span><ArrowRight /></a></div></div></section>
 }
 
 function Education() {
-  return (
-    <section className="page-section education" id="education">
-      <div className="container narrow-container">
-        <SectionHeader
-          index="05"
-          label="EDUCATION"
-          title="Education"
-          subtitle="Academic background and continuous learning."
-        />
-        <Reveal className="education-card">
-          <div className="education-icon">
-            <GraduationCap />
-          </div>
-          <div className="education-main">
-            <p>Bachelor of Science</p>
-            <h3>Computer Science</h3>
-            <span>
-              The World Islamic Sciences and Education University (WISE)
-            </span>
-          </div>
-          <time>2026</time>
-          <div className="education-facts">
-            <span>
-              <strong>89%</strong> GPA
-            </span>
-            <span>
-              <strong>2nd</strong> in Computer Science cohort
-            </span>
-            <span>
-              <strong>English</strong> Language of instruction
-            </span>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
+  return <section className="page-section education" id="education"><div className="container narrow-container"><SectionHeader index="04" label="EDUCATION" title="Grounded in fundamentals." subtitle="Computer science, strengthened through practical product engineering." /><Reveal className="education-editorial"><GraduationCap /><p>Bachelor of Science</p><h3>Computer Science</h3><span>The World Islamic Sciences and Education University (WISE)</span><time>2026</time><div><b>89% GPA</b><b>2nd in CS cohort</b><b>English instruction</b></div></Reveal></div></section>
 }
 
 function Contact() {
-  const submit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const subject = encodeURIComponent(
-      `Portfolio message from ${data.get("name")}`,
-    );
-    const body = encodeURIComponent(
-      `${data.get("message")}\n\nFrom: ${data.get("name")} (${data.get("email")})`,
-    );
-    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
-  };
-  return (
-    <section className="page-section contact" id="contact">
-      <div className="container">
-        <SectionHeader
-          index="06"
-          label="CONTACT"
-          title="Let’s Connect"
-          subtitle="Have an opportunity, project, or idea in mind? I’d love to hear from you."
-        />
-        <div className="contact-grid">
-          <Reveal className="contact-details">
-            <p className="availability-line">
-              <i /> Available for the right opportunity
-            </p>
-            <a href={`mailto:${profile.email}`}>
-              <Mail />
-              <span>
-                <small>Email</small>
-                {profile.email}
-              </span>
-            </a>
-            <span>
-              <MapPin />
-              <span>
-                <small>Location</small>Amman, Jordan
-              </span>
-            </span>
-            <a href={profile.github} target="_blank" rel="noreferrer">
-              <GithubIcon />
-              <span>
-                <small>GitHub</small>maroomabdallah-ux
-              </span>
-            </a>
-            <a href={profile.linkedin} target="_blank" rel="noreferrer">
-              <LinkedinIcon />
-              <span>
-                <small>LinkedIn</small>Maroom Abdalla
-              </span>
-            </a>
-          </Reveal>
-        <Reveal className="contact-form" delay={100}>
-            <form onSubmit={submit}>
-              <label>
-                Name
-                <input
-                  required
-                  name="name"
-                  autoComplete="name"
-                  placeholder="Your name"
-                />
-              </label>
-              <label>
-                Email
-                <input
-                  required
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                />
-              </label>
-              <label>
-                Message
-                <textarea
-                  required
-                  name="message"
-                  rows="5"
-                  placeholder="Tell me about your idea or opportunity"
-                />
-              </label>
-              <button className="button button-primary" type="submit">
-                Send message <Send />
-              </button>
-              <p>This opens your email app—no information is stored.</p>
-            </form>
-          </Reveal>
-        </div>
-      </div>
-    </section>
-  );
+  const submit = (event) => { event.preventDefault(); const data = new FormData(event.currentTarget); window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(`Portfolio message from ${data.get('name')}`)}&body=${encodeURIComponent(`${data.get('message')}\n\nFrom: ${data.get('name')} (${data.get('email')})`)}` }
+  return <section className="page-section contact" id="contact"><div className="container"><SectionHeader index="05" label="CONTACT" title="Make something meaningful." subtitle="Have an opportunity, project, or thoughtful idea? My inbox is open." /><div className="contact-grid"><Reveal className="contact-details"><p className="availability-line"><i />Available for the right opportunity</p><a className="contact-email" href={`mailto:${profile.email}`}>{profile.email}<ArrowUpRight /></a><div className="contact-meta"><span><MapPin />Amman, Jordan</span><a href={profile.github} target="_blank" rel="noreferrer"><GithubIcon />GitHub</a><a href={profile.linkedin} target="_blank" rel="noreferrer"><LinkedinIcon />LinkedIn</a></div></Reveal><Reveal className="contact-form" delay={100}><form onSubmit={submit}><label>Name<input required name="name" autoComplete="name" placeholder="Your name" /></label><label>Email<input required type="email" name="email" autoComplete="email" placeholder="you@example.com" /></label><label>Message<textarea required name="message" rows="4" placeholder="Tell me about your idea or opportunity" /></label><button className="primary-link" type="submit">Open email draft <Send /></button><p>This opens your email app. Nothing is stored.</p></form></Reveal></div></div></section>
 }
 
-function Footer() {
-  const links = [
-    ["Home", "home"],
-    ["About", "about"],
-    ["Skills", "skills"],
-    ["Projects", "projects"],
-    ["Experience", "experience"],
-    ["Education", "education"],
-    ["Contact", "contact"],
-  ];
-  return (
-    <footer>
-      <div className="container footer-main">
-        <div className="footer-brand">
-          <strong>MAROOM ABDALLA</strong>
-          <span>AI &amp; BACKEND ENGINEER</span>
-        </div>
-        <nav aria-label="Footer navigation">
-          {links.map(([label, id]) => (
-            <a key={id} href={`#${id}`}>
-              {label}
-            </a>
-          ))}
-        </nav>
-        <div className="footer-social">
-          <a href={profile.github} target="_blank" rel="noreferrer">
-            GitHub
-          </a>
-          <a href={profile.linkedin} target="_blank" rel="noreferrer">
-            LinkedIn
-          </a>
-        </div>
-      </div>
-      <div className="container footer-bottom">
-        <p>© {new Date().getFullYear()} Maroom Abdalla</p>
-        <p>Designed &amp; built by Maroom Abdalla</p>
-        <a href="#home">
-          Back to top <ArrowUp />
-        </a>
-      </div>
-    </footer>
-  );
-}
+function Footer() { return <footer><div className="container footer-main"><div><strong>maroom.</strong><span>AI · FULL-STACK · BACKEND</span></div><nav><a href="#projects">Work</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#contact">Contact</a></nav><a href="#home">Back to top <ArrowUp /></a></div><div className="container footer-bottom"><p>© {new Date().getFullYear()} Maroom Abdalla</p><p>Designed &amp; built in Amman</p></div></footer> }
 
-function App() {
-  const [activeProject, setActiveProject] = useState(null);
-  useScrollMotion();
-  return (
-    <div className="site-shell">
-      <a className="skip-link" href="#about">
-        Skip to content
-      </a>
-      <Navigation />
-      <main>
-        <Hero />
-        <About />
-        <Skills />
-        <Projects onOpen={setActiveProject} />
-        <Experience />
-        <Education />
-        <Contact />
-      </main>
-      <Footer />
-      {activeProject && (
-        <CaseStudy
-          project={activeProject}
-          onClose={() => setActiveProject(null)}
-        />
-      )}
-    </div>
-  );
-}
+function App() { const [activeProject, setActiveProject] = useState(null); const rootRef = useRef(null); useScrollMotion(rootRef); return <div className="site-shell" ref={rootRef}><a className="skip-link" href="#projects">Skip to selected work</a><Navigation /><NarrativeRail /><main><Hero onOpen={setActiveProject} /><Projects onOpen={setActiveProject} /><Skills /><Experience /><Education /><Contact /></main><Footer />{activeProject && <CaseStudy project={activeProject} onClose={() => setActiveProject(null)} />}</div> }
 
-export default App;
+export default App

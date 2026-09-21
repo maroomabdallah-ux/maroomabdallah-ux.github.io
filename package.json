@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
-    "vite": "latest",
+    "clsx": "latest",
+    "gsap": "^3.15.0",
+    "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "lucide-react": "latest",
-    "clsx": "latest",
-    "tailwind-merge": "latest"
-  },
-  "devDependencies": {}
+    "tailwind-merge": "latest",
+    "vite": "latest"
+  }
 }
