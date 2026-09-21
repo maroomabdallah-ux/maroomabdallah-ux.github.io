@@ -50,7 +50,7 @@ export function useScrollMotion(rootRef) {
         const preview = root.querySelector('.laptop-live-preview')
         const invitation = root.querySelector('.scroll-invitation')
         gsap.set(copy, { autoAlpha: 1, y: 0 })
-        gsap.set(laptop, { left: 0, right: 0, top: '91%', xPercent: 0, yPercent: -50, scale: .62 })
+        gsap.set(laptop, { left: 0, right: 0, top: '76%', xPercent: 0, yPercent: -50, scale: .72 })
         gsap.set(lid, { scaleY: .78, transformOrigin: 'center bottom', rotateX: 0 })
         gsap.set(notes, { autoAlpha: 0, y: 14 })
         gsap.set(build, { '--build': .08 })

@@ -506,7 +506,7 @@ body{background:var(--paper);color:var(--ink)}
  .hero h1{font-size:clamp(32px,8.8vw,45px)!important;line-height:.94!important;margin-bottom:11px!important;letter-spacing:-.055em!important}
  .hero-intro{max-width:32rem;font-size:clamp(11px,3vw,14px)!important;line-height:1.4!important;margin-bottom:12px!important}
  .hero-actions .primary-link{min-height:40px!important;padding-inline:14px!important;font-size:9px!important}
- .hero-system-wrap{width:min(92vw,560px)!important;top:91%;left:0!important;right:0!important;margin-inline:auto!important;z-index:5!important}
+ .hero-system-wrap{width:min(92vw,560px)!important;top:76%;left:0!important;right:0!important;margin-inline:auto!important;z-index:5!important}
  .hero-preview-label,.hero-preview-foot{padding-block:7px!important;font-size:clamp(6px,1.65vw,8px)!important}
  .hero-skill-stream{z-index:6!important}
  .hero-skill-note,.hero-skill-note.skill-left,.hero-skill-note.skill-right{width:46%!important;padding:8px 5px!important}
@@ -516,6 +516,16 @@ body{background:var(--paper);color:var(--ink)}
  .hero-skill-note[data-skill-step="2"],.hero-skill-note[data-skill-step="3"]{top:80%!important}
  .hero-skill-note b{font-size:clamp(13px,3.5vw,18px)!important}
  .hero-skill-note p{font-size:clamp(6px,1.7vw,9px)!important;line-height:1.35!important}
+}
+@media (max-width:780px) {
+ .nav-wrap{
+  background:rgba(232,223,217,.96)!important;
+  border-bottom:1px solid rgba(70,52,61,.18)!important;
+  box-shadow:0 6px 20px rgba(70,52,61,.08)!important;
+  backdrop-filter:blur(14px);
+ }
+ .menu-toggle{background:rgba(248,245,242,.58)}
+ .mobile-navigation{background:var(--custard)!important}
 }
 @media (max-width:360px) and (prefers-reduced-motion:no-preference) {
  .hero-layout{min-height:520px!important}
