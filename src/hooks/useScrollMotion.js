@@ -44,12 +44,34 @@ export function useScrollMotion(rootRef) {
       })
 
       mm.add('(max-width: 780px)', () => {
-        gsap.set(laptop, { clearProps: 'left,top,scale,xPercent,yPercent,transform' })
-        gsap.set(lid, { clearProps: 'transform,scaleY,rotateX', scaleY: 1 })
-        gsap.set(notes, { clearProps: 'all', autoAlpha: 1 })
-        gsap.set('.build-laptop', { '--build': 1 })
-        gsap.set('.laptop-editor', { opacity: 0 })
-        gsap.set('.laptop-live-preview', { opacity: 1 })
+        // Mobile has its own reversible scroll story, not a frozen desktop layout.
+        const copy = root.querySelector('.hero-copy-block')
+        const build = root.querySelector('.build-laptop')
+        const editor = root.querySelector('.laptop-editor')
+        const preview = root.querySelector('.laptop-live-preview')
+        const invitation = root.querySelector('.scroll-invitation')
+        gsap.set(copy, { autoAlpha: 1, y: 0 })
+        gsap.set(laptop, { left: '50%', top: '76%', xPercent: -50, yPercent: -50, scale: .72 })
+        gsap.set(lid, { scaleY: .78, transformOrigin: 'center bottom', rotateX: 0 })
+        gsap.set(notes, { autoAlpha: 0, y: 14 })
+        gsap.set(build, { '--build': .08 })
+        gsap.set(editor, { opacity: 1 })
+        gsap.set(preview, { opacity: 0 })
+        const story = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
+          trigger: '.hero', start: 'top top', end: 'bottom bottom', scrub: .12,
+          invalidateOnRefresh: true,
+        } })
+        story.to(copy, { autoAlpha: 0, y: -18, duration: .19 }, .03)
+          .to(laptop, { top: '52%', scale: 1, duration: .32 }, .04)
+          .to(lid, { scaleY: 1, duration: .32 }, .04)
+          .to(build, { '--build': .75, duration: .43 }, .06)
+          .to(invitation, { autoAlpha: 0, duration: .1 }, .08)
+        notes.forEach((note, index) => story.to(note, {
+          autoAlpha: 1, y: 0, duration: .085,
+        }, .43 + index * .075))
+        story.to(build, { '--build': 1, duration: .12 }, .75)
+          .to(preview, { opacity: 1, duration: .12 }, .76)
+          .to(editor, { opacity: 0, duration: .12 }, .76)
       })
       mm.add('(min-width: 781px)', () => {
         const firstProject = document.querySelector('.project-story[data-project-index="0"] .project-media')
